@@ -3,20 +3,24 @@ package sanoshchenko.com.whattowear;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
-import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
+
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,18 +43,12 @@ public class MainActivity extends AppCompatActivity {
     private TextView timeLabel;
     private TextView temperatureLabel;
     private ImageView iconImageView;
-    private ImageView imageCloseView1;
-    private ImageView imageCloseView2;
-    private ImageView imageCloseView3;
-    private ImageView imageCloseView4;
     private ImageView imageRefresh;
+    private ProgressBar progressBar;
     private ImageSwitcher Switch;
-    private static final int SWIPE_MIN_DISTANCE = 120;
-    private static final int SWIPE_MAX_OFF_PATH = 250;
-    private static final int SWIPE_THRESHOLD_VELOCITY = 200;
-    private GestureDetector gestureDetector;
-    View.OnTouchListener gestureListener;
-
+    private int mCurIndex;
+    private int[] mImageIds = {R.drawable.close_sunny_20, R.drawable.close_sunny_21,R.drawable.close_sunny_22,
+            R.drawable.close_sunny_23};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,17 +56,33 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         final double latitude = 50.394368;
         final double longitude = 30.619696;
-        //ButterKnife.bind(this);
-
         timeLabel = (TextView)findViewById(R.id.timeLabel);
         temperatureLabel = (TextView)findViewById(R.id.temperatureLabel);
         iconImageView = (ImageView)findViewById(R.id.iconImageView);
         imageRefresh = (ImageView)findViewById(R.id.imageRefresh);
-        imageCloseView1 = (ImageView)findViewById(R.id.imageCloses1);
-        imageCloseView2 = (ImageView)findViewById(R.id.imageCloses2);
-       // imageCloseView3 = (ImageView)findViewById(R.id.imageCloses3);
-       // imageCloseView4 = (ImageView)findViewById(R.id.imageCloses4);
+        progressBar = (ProgressBar)findViewById(R.id.progressBar);
         Switch = (ImageSwitcher)findViewById(R.id.imageSwitcher);
+        progressBar.setVisibility(View.INVISIBLE);
+
+        YoYo.with(Techniques.FlipInX)
+                .duration(1000)
+                .playOn(findViewById(R.id.imageSwitcher));
+
+        Switch.setFactory(new ViewSwitcher.ViewFactory() {
+
+            @Override
+            public View makeView() {
+
+                ImageView imageView = new ImageView(MainActivity.this);
+                imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+                FrameLayout.LayoutParams params = new ImageSwitcher.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+
+                imageView.setLayoutParams(params);
+                return imageView;
+            }
+        });
 
         imageRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         if (isNetworkAvailable()) {
+            toggleRefresh();
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
                     .url(url)
@@ -101,11 +116,23 @@ public class MainActivity extends AppCompatActivity {
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            toggleRefresh();
+                        }
+                    });
+                    alertUserAboutError();
                 }
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            toggleRefresh();
+                        }
+                    });
                     try {
                         String jsonData = response.body().string();
                         Log.v(TAG, jsonData);
@@ -120,11 +147,9 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             alertUserAboutError();
                         }
-                    }
-                    catch (IOException e) {
+                    } catch (IOException e) {
                         Log.e(TAG, "Exception caught", e);
-                    }
-                    catch (JSONException e){
+                    } catch (JSONException e) {
                         Log.e(TAG, "Exception caught", e);
                     }
                 }
@@ -135,20 +160,27 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void toggleRefresh() {
+        if (progressBar.getVisibility() == View.INVISIBLE){
+            progressBar.setVisibility(View.VISIBLE);
+            imageRefresh.setVisibility(View.INVISIBLE);
+        }
+        else {
+            progressBar.setVisibility(View.INVISIBLE);
+            imageRefresh.setVisibility(View.VISIBLE);
+        }
+        }
+
     private void updateDisplay() {
         timeLabel.setText("At " + currentWeather.getFormattedTime() +  " it will be");
         temperatureLabel.setText(String.valueOf(currentWeather.getTemperature()));
         Drawable drawable = ContextCompat.getDrawable(this, currentWeather.getIconId());
-        int intImage1[] =  currentWeather.getImageCloses();
-        Drawable drawableImage1 = ContextCompat.getDrawable(this, intImage1[0]);
-        Drawable drawableImage2 = ContextCompat.getDrawable(this, intImage1[1]);
-       // Drawable drawableImage3 = ContextCompat.getDrawable(this, intImage1[2]);
-       // Drawable drawableImage4 = ContextCompat.getDrawable(this, intImage1[3]);
+        mImageIds =  currentWeather.getImageCloses();
+
         iconImageView.setImageDrawable(drawable);
-        imageCloseView1.setImageDrawable(drawableImage1);
-        imageCloseView2.setImageDrawable(drawableImage2);
-     //   imageCloseView3.setImageDrawable(drawableImage3);
-      //  imageCloseView4.setImageDrawable(drawableImage4);
+
+        mCurIndex = 0;
+        Switch.setImageResource(mImageIds[mCurIndex]);
     }
 
 
@@ -189,6 +221,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onSwitcherClick(View view) {
-        Switch.showNext();
+        if (mCurIndex == mImageIds.length - 1) {
+            mCurIndex = 0;
+            Switch.setImageResource(mImageIds[mCurIndex]);
+        } else {
+            Switch.setImageResource(mImageIds[++mCurIndex]);
+        }
     }
 }
