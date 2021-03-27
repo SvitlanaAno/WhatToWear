@@ -1,89 +1,107 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity"
-    android:background="#ffadc0">
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/temperatureLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="24"
-        android:id="@+id/temperatureLabel"
-        android:textColor="#aaffff"
-        android:textSize="110sp"
-        android:layout_marginTop="112dp"
+        android:layout_alignStart="@+id/timeLabel"
         android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/timeLabel" />
+        android:layout_marginTop="112dp"
+        android:text="20"
+        android:textColor="#121212"
+        android:textSize="110sp" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/degreeImageView"
-        android:src="@drawable/degree"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignTop="@+id/temperatureLabel"
+        android:layout_marginTop="40dp"
         android:layout_toEndOf="@+id/temperatureLabel"
-        android:layout_marginTop="40dp" />
+        android:src="@drawable/degree" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="At 13:00 it will be:"
         android:id="@+id/timeLabel"
-        android:textColor="#e6aaffff"
-        android:textSize="18sp"
-        android:singleLine="false"
-        android:phoneNumber="true"
-        android:layout_above="@+id/degreeImageView"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Kiev, Ukraine"
+        android:layout_above="@+id/degreeImageView"
+        android:layout_centerHorizontal="true"
+        android:singleLine="false"
+        android:text="At 13:00 it will be:"
+        android:textColor="#E6000000"
+        android:textSize="18sp" />
+
+    <TextView
         android:id="@+id/locationLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/timeLabel"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="5dp"
-        android:textColor="#aaffff"
-        android:textSize="35sp"
-        android:textIsSelectable="false" />
+        android:text="Kiev, Ukraine"
+        android:textColor="#131515"
+        android:textIsSelectable="false"
+        android:textSize="35sp" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/iconImageView"
-        android:src="@drawable/cloudy_night"
-        android:layout_alignTop="@+id/locationLabel"
-        android:layout_toStartOf="@+id/locationLabel"
-        android:layout_marginRight="2dp" />
-
-    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/locationLabel"
+        android:layout_marginRight="2dp"
+        android:layout_toStartOf="@+id/locationLabel"
+        android:src="@drawable/cloudy_night" />
+
+    <ImageView
         android:id="@+id/imageRefresh"
-        android:src="@drawable/refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/locationLabel"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="5dp" />
+        android:layout_marginBottom="5dp"
+        android:src="@drawable/refresh" />
 
     <ProgressBar
+        android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/progressBar"
-        android:layout_centerHorizontal="true"
-        android:layout_alignBottom="@+id/imageRefresh" />
+        android:layout_alignBottom="@+id/imageRefresh"
+        android:layout_centerHorizontal="true" />
 
-    <ImageSwitcher
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/imageSwitcher"
-        android:layout_below="@+id/temperatureLabel"
-        android:layout_alignParentStart="true"
         android:layout_marginTop="30dp"
+        android:layout_below="@+id/temperatureLabel">
+    <ImageSwitcher
+        android:id="@+id/imageSwitcher"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentStart="true"
         android:onClick="onSwitcherClick">
-
     </ImageSwitcher>
-
+        <ImageView
+            android:id="@+id/right"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:scaleType="fitXY"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/right"/>
+        <ImageView
+            android:id="@+id/left"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:scaleType="fitXY"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/left"/>
+</RelativeLayout>
 </RelativeLayout>
