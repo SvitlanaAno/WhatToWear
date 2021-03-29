@@ -9,10 +9,9 @@ Application that recommends what to wear (multiple different looks with a set of
 - Build location-aware apps using FusedLocationProviderClient (GoogleApi)
 - Thread Basics and AsyncTask
 - Request runtime location permissions 
-- Build location-aware apps using FusedLocationProviderClient (GoogleApi)
 - Event handling
 - Using ViewSwitcher and FrameLayout
 
 ## Demo
 
-![Alt Text](demo/demo.gif)
+<img src="https://github.com/SvitlanaAno/WhatToWear/tree/master/demo/demo.gif" alt="App gif"  width="300"/
