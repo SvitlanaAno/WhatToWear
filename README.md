@@ -13,6 +13,6 @@ Application that recommends what to wear (multiple different looks with a set of
 - Using ViewSwitcher and FrameLayout
 
 ## Demo
-![](demo/demo.gif| width=100)
+![](https://github.com/SvitlanaAno/WhatToWear/tree/master/demo/demo.gif | width=100)
 
 
