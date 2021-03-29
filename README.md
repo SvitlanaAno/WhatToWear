@@ -14,6 +14,6 @@ Application that recommends what to wear (multiple different looks with a set of
 
 ## Demo
 
-<img src="https://github.com/SvitlanaAno/WhatToWear/tree/master/demo/demo.gif" width="300">
+![Alt Text](demo/demo.gif) {:height="500px" width="500px"}
 
 
