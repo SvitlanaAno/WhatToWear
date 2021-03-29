@@ -13,7 +13,6 @@ Application that recommends what to wear (multiple different looks with a set of
 - Using ViewSwitcher and FrameLayout
 
 ## Demo
-
-![Alt Text](demo/demo.gif =250x250)
+![](demo/demo.gif| width=100)
 
 
