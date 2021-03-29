@@ -14,6 +14,6 @@ Application that recommends what to wear (multiple different looks with a set of
 
 ## Demo
 
-![Alt Text](demo/demo.gif) {:height="500px" width="500px"}
+![Alt Text](demo/demo.gif =250x250)
 
 
